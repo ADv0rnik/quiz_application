@@ -1,5 +1,5 @@
 from django.db import models
-from quizapp.quizzes.models import Quiz
+from quizzes.models import Quiz
 
 
 class Question(models.Model):
@@ -14,4 +14,11 @@ class Question(models.Model):
         return self.answer_set.all()
 
 
-# set answers class
+class Answer(models.Model):
+    text = models.CharField(max_length=200)
+    correct = models.BooleanField(default=False)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"question: {self.question.text}, answer: {self.text}, correct: {self.correct}"
