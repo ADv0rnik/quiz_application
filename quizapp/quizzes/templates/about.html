@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="entry-crumbs">
+    <span>
+        <a title="" class="entry-crumb" href="{% url 'home' %}">
+            Home</a>
+    </span>
+
+        <i class="td-icon-right td-bread-sep td-bred-no-url-last">
+            >
+        </i>
+        <span class="td-bred-no-url-last">About</span>
+    </div>
+</div>
+<hr>
+<div class="container col-xxl-8 px-2 py-2">
+    <h1>About</h1>
+    <p class="lead"> Some information </p>
+</div>
+
+{% endblock %}
+
