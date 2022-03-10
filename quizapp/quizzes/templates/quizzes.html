@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="entry-crumbs">
+    <span>
+        <a title="" class="entry-crumb" href="{% url 'home' %}">
+            Home</a>
+    </span>
+
+        <i class="td-icon-right td-bread-sep td-bred-no-url-last">
+            >
+        </i>
+        <span class="td-bred-no-url-last">Quizzes</span>
+    </div>
+</div>
+<hr>
+
+<div class="container py-3">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">{{quiz_1.name}}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Topic: {{ quiz_1.topic }}</li>
+                        <li>Number of questions: {{ quiz_1.number_of_questions }}</li>
+                        <li>Score to pass (in %): {{ quiz_1.score }}</li>
+                        <li>Difficulty: {{ quiz_1.difficulty }}</li>
+                    </ul>
+                    <button type="button" id="start-btn" class="w-100 btn btn-lg btn-primary">Get started</button>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card mb-4 rounded-3 shadow-sm">
+                <div class="card-header py-3">
+                    <h4 class="my-0 fw-normal">{{quiz_2.name}}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4">
+                        <li>Topic: {{ quiz_2.topic }}</li>
+                        <li>Number of questions: {{ quiz_2.number_of_questions }}</li>
+                        <li>Score to pass (in %): {{ quiz_2.score }}</li>
+                        <li>Difficulty: {{ quiz_2.difficulty }}</li>
+                    </ul>
+                    <button type="button" class="w-100 btn btn-lg btn-primary">Get started</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
