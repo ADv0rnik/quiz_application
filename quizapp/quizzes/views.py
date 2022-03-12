@@ -23,7 +23,8 @@ def quiz(request):
 
 
 def quiz_data(request, pk):
-    pass
+    q = Quiz.objects.get(pk=pk)
+    return render(request, 'quiz.html', {"quiz": q})
 
 
 def index(request):

@@ -1,6 +1,7 @@
 from django.db import models
+from django.urls import reverse
 
-# Create your models here.
+
 DIFF_CHOICE = [
     ('easy', 'easy'),
     ('medium', 'medium'),
@@ -21,6 +22,9 @@ class Quiz(models.Model):
 
     def get_question(self):
         return self.question_set.all()
+
+    def get_absolute_url(self):
+        return reverse('quiz-data', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name_plural = 'Quizes'
