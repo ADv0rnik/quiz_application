@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView
 from quizzes.models import Quiz
@@ -6,10 +7,6 @@ from quizzes.models import Quiz
 class QuizListView(ListView):
     model = Quiz
     template_name = 'quizzes.html'
-
-
-def quiz_view(request, pk):
-    pass
 
 
 def quiz(request):
@@ -27,11 +24,23 @@ def quiz_data(request, pk):
     return render(request, 'quiz.html', {"quiz": q})
 
 
+def quiz_data_view(request, pk):
+    data = Quiz.objects.get(pk=pk)
+    questions = []
+    for q in data.get_question():
+        answers = []
+        for a in q.get_answer():
+            answers.append(a.text)
+        questions.append({str(q): answers})
+    return JsonResponse({
+        'data': questions,
+        'time': data.time,
+    })
+
+
 def index(request):
     return render(request, 'home.html')
 
 
 def about(request):
     return render(request, 'about.html')
-
-
