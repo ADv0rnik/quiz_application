@@ -25,6 +25,7 @@ def quiz_data_view(request, pk):
     data = Quiz.objects.get(pk=pk)
     questions = []
     for q in data.get_question():
+        print(q.text)
         answers = []
         for a in q.get_answer():
             answers.append(a.text)
@@ -44,7 +45,6 @@ def save_quiz_data(request, pk):
         questions = []
         data = request.POST
         data_ = dict(data.lists())
-        data_.pop('csrfmiddlewaretoken')
 
         for key in data_.keys():
             question = Question.objects.get(text=key)
@@ -68,7 +68,7 @@ def save_quiz_data(request, pk):
                         correct_answer = answer.text
                     else:
                         correct_answer = answer.text
-                results.append({str(q_): {'correct answer': correct_answer, 'answered': answer_selected}})
+                results.append({str(q_): {'correct answer': correct_answer, 'your answered': answer_selected}})
             else:
                 results.append({str(q_): 'missed'})
 

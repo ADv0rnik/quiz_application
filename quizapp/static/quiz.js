@@ -3,100 +3,84 @@ console.log(url)
 const quizBox = document.getElementById('quiz-box')
 const scoreBox = document.getElementById('score-box')
 const resultBox = document.getElementById('result-box')
+const nextButton = document.getElementById('next-btn')
+const submitButton = document.getElementById('sbt-btn')
 
-$.ajax({
-    type: 'GET',
-    url: `${url}data/`,
-    success: function(response){
-        const data = response.data
-        data.forEach(item => {
-            for (const [question, answers] of Object.entries(item)){
-                  quizBox.innerHTML += `
-                    <hr>
-                    <div class="mb-2">
-                        <b>${question}</b>
-                    </div>
-                  `
-                  answers.forEach(answer =>{
-                    quizBox.innerHTML += `
-                        <div>
-                            <input type="radio" class="ans" id="${question}-${answer}" name="${question}" value="${answer}">
-                            <label for "${question}">${answer}</label>
-                        </div>
-                    `
-                  })
-            }
-        })
-    },
-    error: function(error){
-        console.log(response)
+let currentQuestionIndex
+
+currentQuestionIndex = 0
+nextButton.addEventListener('click', () => {
+    if (return_data.length > currentQuestionIndex + 1) {
+        currentQuestionIndex++
+        setNextQuestion()
+    } else {
+        nextButton.style.display = 'none'
+        submitButton.style.visibility = "visible"
     }
-
 })
 
-const quizForm = document.getElementById('quiz-form')
-const csrf = document.getElementsByName('csrfmiddlewaretoken')
-
-
-const sendData = () => {
-    const elements = [...document.getElementsByClassName('ans')]
-    const data = {}
-    data['csrfmiddlewaretoken'] = csrf[0].value
-    elements.forEach(el=>{
-        if (el.checked) {
-            data[el.name] = el.value
-        } else {
-            if (!data[el.name]) {
-                data[el.name] = null
-            }
-        }
-    })
-
+var return_data = function () {
+    var data = null;
     $.ajax({
-        type: 'POST',
-        url: `${url}save/`,
-        data: data,
-        success: function(response){
-            console.log(response)
-            const results = response.results
-            quizForm.classList.add('not-visible')
-            results.forEach(res=>{
-                const resDiv = document.createElement("div")
-                for (const [question, resp] of Object.entries(res)){
-
-                    resDiv.innerHTML += question
-                    const cls = ['container', 'p-3', 'text-light', 'h6']
-                    resDiv.classList.add(...cls)
-
-                    if (resp=='not answered') {
-                        resDiv.innerHTML += '- not answered'
-                        resDiv.classList.add('bg-danger')
-                    }
-                    else {
-                        const answer = resp['answered']
-                        const correct = resp['correct_answer']
-
-                        if (answer == correct) {
-                            resDiv.classList.add('bg-success')
-                            resDiv.innerHTML += ` answered: ${answer}`
-                        } else {
-                            resDiv.classList.add('bg-danger')
-                            resDiv.innerHTML += ` | correct answer: ${correct}`
-                            resDiv.innerHTML += ` | answered: ${answer}`
-                        }
-                    }
-                }
-                resultBox.append(resDiv)
+        async: false,
+        type : "GET",
+        url: `${url}data/`,
+        success: function(response) {
+            data = response.data;
+            const first_question = Object.keys(data[0])[0]
+            quizBox.innerHTML = `
+                <hr>
+                <div class="mb-2">
+                    <b>${first_question} Question ${1} from ${data.length}</b>
+                </div>
+            `
+            submitButton.style.visibility = "hidden"
+            const answers = Object.values(data[0])[0]
+            console.log(answers)
+            answers.forEach(answer => {
+                quizBox.innerHTML += `
+                    <div>
+                       <input type="checkbox" class="ans" id="${first_question}-${answer}" name="${first_question}" value="${answer}">
+                       <label for "${first_question}">${answer}</label>
+                    </div>
+                `
             })
-        },
-        error: function(error){
-            console.log(error)
+            console.log('loading OK')
         }
+    });
+    return data;
+}();
+
+function setNextQuestion(){
+    setQuestion(return_data[currentQuestionIndex])
+    console.log('setNextQuestion OK')
+}
+
+function setQuestion(qstn) {
+    const question = Object.keys(qstn)[0]
+    quizBox.innerHTML = `
+        <hr>
+        <div class="mb-2">
+            <b>${question} Question ${currentQuestionIndex + 1} from ${return_data.length}</b>
+        </div>
+    `
+    const answers = Object.values(qstn)[0]
+    answers.forEach(answer => {
+        quizBox.innerHTML += `
+            <div>
+                <input type="checkbox" class="ans" id="${question}-${answer}" name="${question}" value="${answer}">
+                <label for "${question}">${answer}</label>
+            </div>
+        `
+    console.log('OK')
     })
 }
 
-quizForm.addEventListener('submit', e =>{
-    e.preventDefault()
+//const var_ = Object.values(return_data[0])
+//console.log(var_)
 
-    sendData()
-})
+const quizControl = document.getElementById('control')
+const quizForm = document.getElementById('quiz-form')
+const csrf = document.getElementsByName('csrfmiddlewaretoken')
+const questionBox = document.getElementById('question-box')
+
