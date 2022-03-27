@@ -4,6 +4,7 @@ from django.shortcuts import render
 from questions.models import Question, Answer
 from quizzes.models import Quiz
 from results.models import Results
+import re
 
 
 def quiz(request):
@@ -24,15 +25,32 @@ def quiz_data(request, pk):
 def quiz_data_view(request, pk):
     data = Quiz.objects.get(pk=pk)
     questions = []
+    type_of_answers = []
     for q in data.get_question():
-        print(q.text)
+        type_of_answers.append(q.type_of_answer)
         answers = []
         for a in q.get_answer():
             answers.append(a.text)
         questions.append({str(q): answers})
+    #print(questions)
     return JsonResponse({
         'data': questions,
+        'type': type_of_answers,
     })
+
+
+def clear_data(var):
+    new_dict = {}
+    pattern = '[A-zА-я0-9\,\(\)\s]*\?'
+    for key, val in var.copy().items():
+        if len(val) > 1:
+            new_val = val[1:]
+        else:
+            new_val = val
+        new_key = re.findall(pattern, key)
+        if new_key[0] not in new_dict:
+            new_dict[new_key[0]] = new_val
+    return new_dict
 
 
 def is_ajax(request):
@@ -43,12 +61,16 @@ def is_ajax(request):
 def save_quiz_data(request, pk):
     if is_ajax(request=request):
         questions = []
-        data = request.POST
-        data_ = dict(data.lists())
+        data = dict(request.POST.lists())
+        data.pop('csrfmiddlewaretoken')
+        print(data)
+        data_ = clear_data(data)
+        print(data_)
 
         for key in data_.keys():
-            question = Question.objects.get(text=key)
-            questions.append(question)
+            print(key)
+            # question = Question.objects.get(text=key)
+            # questions.append(question)
 
         user = request.user
         quiz_ = Quiz.objects.get(pk=pk)
@@ -71,6 +93,7 @@ def save_quiz_data(request, pk):
                 results.append({str(q_): {'correct answer': correct_answer, 'your answered': answer_selected}})
             else:
                 results.append({str(q_): 'missed'})
+        print(results)
 
         score_ = score * c
         Results.objects.create(quiz=quiz_, user=user, score=score_)
