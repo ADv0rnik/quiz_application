@@ -32,7 +32,7 @@ def quiz_data_view(request, pk):
         for a in q.get_answer():
             answers.append(a.text)
         questions.append({str(q): answers})
-    #print(questions)
+    # print(questions)
     return JsonResponse({
         'data': questions,
         'type': type_of_answers,
@@ -53,6 +53,31 @@ def clear_data(var):
     return new_dict
 
 
+# a function to check correct answer for questions with multiple choice.
+# The "local_score" variable is a counter for correct answers. Positive values correspond to correct answers
+def check_answers(selected, actual):
+    local_score = 0
+    correct_answers = []
+    for selected_answer in selected:
+        answers = []
+        for answer in actual:
+            if answer.text == selected_answer and answer.correct:
+                answers.append(1)
+                correct_answers.append(answer.text)
+            else:
+                answers.append(0)
+                if answer.correct:
+                    correct_answers.append(answer.text)
+        if 1 in answers:
+            local_score += 1
+        else:
+            local_score -= 1
+    return {
+        'score': local_score,
+        'correct': list(set(correct_answers))
+    }
+
+
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
@@ -63,39 +88,37 @@ def save_quiz_data(request, pk):
         questions = []
         data = dict(request.POST.lists())
         data.pop('csrfmiddlewaretoken')
-        print(data)
         data_ = clear_data(data)
-        print(data_)
 
         for key in data_.keys():
-            print(key)
-            # question = Question.objects.get(text=key)
-            # questions.append(question)
-
+            question = Question.objects.get(text=key)
+            questions.append(question)
         user = request.user
         quiz_ = Quiz.objects.get(pk=pk)
         score = 0
-        c = 100 / quiz_.number_of_questions  # coefficient that define a value to recalculate the score
+        c = 100 / quiz_.number_of_questions # coefficient that define a value to recalculate the score
         results = []
-        correct_answer = None
 
-        # Checking for correct answers
         for q_ in questions:
-            answer_selected = request.POST.get(q_.text)
-            if answer_selected != "":
-                question_answers = Answer.objects.filter(question=q_)
-                for answer in question_answers:
-                    if answer_selected == answer.text:
-                        score += 1
-                        correct_answer = answer.text
-                    else:
-                        correct_answer = answer.text
-                results.append({str(q_): {'correct answer': correct_answer, 'your answered': answer_selected}})
+            print('---start---')
+            answers_selected = data_.get(q_.text)
+            print(answers_selected)
+            question_answers = Answer.objects.filter(question=q_)
+            if answers_selected[0] != '':
+                answers_checked = check_answers(answers_selected, question_answers)
+                print(answers_checked)
+                single_score = answers_checked['score']
+                if single_score > 0:
+                    score += single_score
+                else:
+                    score += 0
+                print(score)
+                results.append({str(q_): {'correct answer': answers_checked['correct'], 'your answer': answers_selected}})
             else:
                 results.append({str(q_): 'missed'})
-        print(results)
-
         score_ = score * c
+        print(results)
+        print(score_)
         Results.objects.create(quiz=quiz_, user=user, score=score_)
         if score_ >= quiz_.score:
             return JsonResponse({'passed': True, 'score': score_, "results": results})
