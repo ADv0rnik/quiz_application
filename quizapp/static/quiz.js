@@ -44,14 +44,10 @@ var return_data = function () {
             data.push(data_, answ_type)
             submitButton.style.visibility = "hidden"
             nextButton.style.visibility = "hidden"
-
         }
     })
     return data;
 }();
-//console.log(return_data[0][0])
-//console.log(return_data[1])
-//console.log(return_data[0][0])
 
 function setNextQuestion(){
     checkAnswers()
@@ -144,16 +140,16 @@ const sendData = () => {
                         resDiv.classList.add('bg-danger')
                     }
                     else {
-                        const answer = resp['your answered']
+                        const answer = resp['your answer']
                         const correct = resp['correct answer']
-                        if (answer == correct) {
-                            resDiv.classList.add('bg-success')
-                            resDiv.innerHTML += ` answered: ${answer}`
-                        } else {
-                            resDiv.classList.add('bg-danger')
-                            resDiv.innerHTML += ` | correct answer: ${correct}`
-                            resDiv.innerHTML += ` | Your answer: ${answer}`
-                        }
+                            if (!(answer > correct) && !(answer < correct)){
+                                resDiv.classList.add('bg-success')
+                                resDiv.innerHTML += ` your answer: ${answer}`
+                            } else {
+                                resDiv.classList.add('bg-danger')
+                                resDiv.innerHTML += ` | correct answer: ${correct}`
+                                resDiv.innerHTML += ` | your answer: ${answer}`
+                            }
                     }
                 }
                 resultBox.append(resDiv)
