@@ -7,17 +7,23 @@
 <div class="container">
     <h3>{{quiz.name}} ({{quiz.topic}})</h3>
     <h6>Score to pass: {{quiz.score}} from 100 points</h6>
+    <a href="{% url 'quiz' %}" id="quiz-list-btn" class="btn btn-secondary hide">Go back to quiz list</a>
 </div>
 <div class="container" id="question-box">
     <form id="quiz-form" class="mt-3 mb-3">
         {% csrf_token %}
-        <div id="quiz-box"></div>
+        <div id="quiz-box">
+            <p>Each Multiple Choice question must have at least two answer choices and one or more correct answers <br>
+            Good luck!</p>
+        </div>
     </form>
 </div>
 <div class="container">
+    <button id="start-btn" class="btn btn-primary hide">Start quiz</button>
     <button id="next-btn" class="btn btn-primary hide">Next</button>
     <button id="sbt-btn" class="btn btn-primary" type="submit">Submit</button>
 </div>
 <div id="score-box"></div>
 <div id="result-box"></div>
+
 {% endblock %}
