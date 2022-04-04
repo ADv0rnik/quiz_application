@@ -50,7 +50,14 @@ def clear_data(var):
         new_key = re.findall(pattern, key)
         if new_key[0] not in new_dict:
             new_dict[new_key[0]] = new_val
-    return new_dict
+    return to_lower_case(new_dict)
+
+
+def to_lower_case(dictionary):
+    for key, value in dictionary.items():
+        for v in range(len(value)):
+            value[v] = value[v].lower()
+    return dictionary
 
 
 # a function to check correct answer for questions with multiple choice.
@@ -61,13 +68,13 @@ def check_answers(selected, actual):
     for selected_answer in selected:
         answers = []
         for answer in actual:
-            if answer.text == selected_answer and answer.correct:
+            if answer.text.lower() == selected_answer and answer.correct:
                 answers.append(1)
-                correct_answers.append(answer.text)
+                correct_answers.append(answer.text.lower())
             else:
                 answers.append(0)
                 if answer.correct:
-                    correct_answers.append(answer.text)
+                    correct_answers.append(answer.text.lower())
         if 1 in answers:
             local_score += 1
         else:
@@ -89,6 +96,7 @@ def save_quiz_data(request, pk):
         data = dict(request.POST.lists())
         data.pop('csrfmiddlewaretoken')
         data_ = clear_data(data)
+        print(data_)
 
         for key in data_.keys():
             question = Question.objects.get(text=key)
@@ -96,29 +104,25 @@ def save_quiz_data(request, pk):
         user = request.user
         quiz_ = Quiz.objects.get(pk=pk)
         score = 0
-        c = 100 / quiz_.number_of_questions # coefficient that define a value to recalculate the score
+        c = 100 / quiz_.number_of_answers  # coefficient that define a value to recalculate the score
         results = []
 
         for q_ in questions:
-            print('---start---')
             answers_selected = data_.get(q_.text)
-            print(answers_selected)
             question_answers = Answer.objects.filter(question=q_)
             if answers_selected[0] != '':
                 answers_checked = check_answers(answers_selected, question_answers)
-                print(answers_checked)
                 single_score = answers_checked['score']
                 if single_score > 0:
                     score += single_score
                 else:
                     score += 0
-                print(score)
                 results.append({str(q_): {'correct answer': answers_checked['correct'], 'your answer': answers_selected}})
             else:
                 results.append({str(q_): 'missed'})
         score_ = score * c
-        print(results)
-        print(score_)
+        # print(results)
+        # print(score_)
         Results.objects.create(quiz=quiz_, user=user, score=score_)
         if score_ >= quiz_.score:
             return JsonResponse({'passed': True, 'score': score_, "results": results})
