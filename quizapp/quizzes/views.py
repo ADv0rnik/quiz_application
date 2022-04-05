@@ -49,7 +49,7 @@ def clear_data(var):
             new_val = val
         new_key = re.findall(pattern, key)
         if new_key[0] not in new_dict:
-            new_dict[new_key[0]] = new_val
+            new_dict[new_key[0]] = sorted(new_val)
     return to_lower_case(new_dict)
 
 
@@ -81,7 +81,7 @@ def check_answers(selected, actual):
             local_score -= 1
     return {
         'score': local_score,
-        'correct': list(set(correct_answers))
+        'correct': sorted(list(set(correct_answers)))
     }
 
 
@@ -97,10 +97,15 @@ def save_quiz_data(request, pk):
         data.pop('csrfmiddlewaretoken')
         data_ = clear_data(data)
         print(data_)
-
         for key in data_.keys():
-            question = Question.objects.get(text=key)
-            questions.append(question)
+            print(key)
+            try:
+                question = Question.objects.get(text=key)
+                print('Key exist')
+            except questions.models.Question.DoesNotExist as error:
+                print(error)
+            else:
+                questions.append(question)
         user = request.user
         quiz_ = Quiz.objects.get(pk=pk)
         score = 0
@@ -117,11 +122,12 @@ def save_quiz_data(request, pk):
                     score += single_score
                 else:
                     score += 0
-                results.append({str(q_): {'correct answer': answers_checked['correct'], 'your answer': answers_selected}})
+                results.append(
+                    {str(q_): {'correct answer': answers_checked['correct'], 'your answer': answers_selected}})
             else:
                 results.append({str(q_): 'missed'})
         score_ = score * c
-        # print(results)
+        print(results)
         # print(score_)
         Results.objects.create(quiz=quiz_, user=user, score=score_)
         if score_ >= quiz_.score:
