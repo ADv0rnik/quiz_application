@@ -1,4 +1,6 @@
 from pathlib import Path
+from decouple import config
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,10 +10,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=mwb-cz$_0&0u!m-$knnsjj#qnj2c)-a=d+=rvf8sp65e+7vi9'
+SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG")
 
 ALLOWED_HOSTS = ['*']
 
@@ -27,8 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'quizzes.apps.QuizezConfig',
-    'results',
-    'questions',
+    'questions.apps.QuestionsConfig',
+    'profile.apps.ProfileConfig',
 ]
 
 MIDDLEWARE = [
@@ -67,11 +69,16 @@ WSGI_APPLICATION = 'quizapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('SQL_ENGINE'),
+        'NAME': config('SQL_DATABASE'),
+        'USER': config('SQL_USER'),
+        'PASSWORD': config('SQL_PASSWORD'),
+        'HOST': config('SQL_HOST'),
+        'PORT': config('SQL_PORT'),
     }
 }
-
+#
+#
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
