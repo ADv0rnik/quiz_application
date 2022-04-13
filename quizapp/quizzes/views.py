@@ -1,10 +1,12 @@
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
+
 from questions.models import Question, Answer
 from quizzes.models import Quiz
-from results.models import Results
-import re
+from profile.models import Results
 
 
 def quiz(request):
@@ -100,7 +102,8 @@ def save_quiz_data(request, pk):
         for key in data_.keys():
             print(key)
             try:
-                question = Question.objects.get(text=key)
+                question = Question.objects.select_related('quiz').get(text=key)
+                print(question)
                 print('Key exist')
             except questions.models.Question.DoesNotExist as error:
                 print(error)
