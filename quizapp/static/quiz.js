@@ -64,8 +64,7 @@ function setQuestion(qstn, type_of_answer) {
         <hr>
         <div class="mb-2">
             <b>${question} Question ${currentQuestionIndex + 1} from ${return_data[0].length}</b><br>
-            <input type="text" class="ans" id="${question}" name="${question}">
-            <label for "${question}">Type your answer here</label>
+            <input type="text" class="ans" placeholder='Type your answer here' id="${question}" name="${question}">
         </div>
     `
     console.log('OK')
@@ -125,7 +124,7 @@ const sendData = () => {
             scoreBox.innerHTML = `
             <hr>
             <div class="container">
-                ${response.passed ? 'Congratulations! ' : 'Please, try again'}Your result is ${response.score.toFixed(2)}%
+                ${response.passed ? 'Congratulations! ' : 'Please, try again '}Your result is ${response.score.toFixed(2)}%
             </div>
             <hr>
             `
@@ -133,7 +132,7 @@ const sendData = () => {
                 const resDiv = document.createElement("div")
                 for (const [question, resp] of Object.entries(res)){
                     resDiv.innerHTML += question
-                    const cls = ['container', 'p-3', 'text-light', 'h6']
+                    const cls = ['container', 'p-3', 'bg-opacity-75', 'text-dark', 'h6']
                     resDiv.classList.add(...cls)
                     if (resp=='missed') {
                         resDiv.innerHTML += '- missed'
