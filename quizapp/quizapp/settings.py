@@ -27,10 +27,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_nose',
 
     'quizzes.apps.QuizezConfig',
     'questions.apps.QuestionsConfig',
     'profile.apps.ProfileConfig',
+]
+
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=quizzes',
 ]
 
 MIDDLEWARE = [
