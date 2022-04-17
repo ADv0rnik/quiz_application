@@ -18,11 +18,11 @@
                 <form class="" method="POST" action="" autocomplete="off">
                     {% csrf_token %}
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-4" id="floatingInputValue1" name="{{ form.username.html_name }}" placeholder="Username">
+                        <input type="text" class="form-control rounded-4" id="floatingInputValue1" name="username" placeholder="Username">
                         <label for="floatingInputValue1">Username</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="password" class="form-control" id="floatingPassword" name="{{ form.password1.html_name }}" placeholder="Password">
+                        <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password">
                         <label for="floatingPassword">Password</label>
                     </div>
                     <button class="w-100 mb-2 btn btn-lg rounded-4 btn-warning" type="submit">Login</button>
