@@ -23,11 +23,17 @@
                     <li><a href="{% url 'about' %}" class="nav-link px-2 text-white">About</a></li>
                     <li><a href="#" class="nav-link px-2 text-white">Contacts</a></li>
                 </ul>
-
+                {% if user.is_authenticated %}
                 <div class="text-end">
-                    <button type="button" class="btn btn-outline-light me-2">Login</button>
+                    <span>Hello, {{ request.user }} &nbsp </span>
+                    <button type="button" onclick="window.location.href={% url 'logout' %}" class="btn btn-outline-light me-2">Logout</button>
+                </div>
+                {% else %}
+                <div class="text-end">
+                    <button type="button" onclick="window.location.href={% url 'login' %}" class="btn btn-outline-light me-2">Login</button>
                     <button type="button" onclick="window.location.href={% url 'register' %}" class="btn btn-warning">Sign-up</button>
                 </div>
+                {% endif %}
             </div>
         </div>
     </header>
