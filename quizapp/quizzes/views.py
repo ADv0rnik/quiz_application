@@ -19,6 +19,7 @@ def quiz(request):
     return render(request, 'quizzes.html', context)
 
 
+@login_required
 def quiz_data(request, pk):
     q = Quiz.objects.get(pk=pk)
     return render(request, 'quiz.html', {"quiz": q})

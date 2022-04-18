@@ -30,7 +30,11 @@
                         <li>Score to pass (in %): {{ quiz_1.score }}</li>
                         <li>Difficulty: {{ quiz_1.difficulty }}</li>
                     </ul>
-                    <button type="button" id="start-btn" class="w-100 btn btn-warning" onclick="window.location.href='{{ quiz_1.get_absolute_url }}'">Take this quiz</button>
+                    {% if user.is_authenticated %}
+                        <button type="button" class="w-100 btn btn-warning" onclick="window.location.href='{{ quiz_1.get_absolute_url }}'">Take this quiz</button>
+                    {% else %}
+                        <button type="button" class="w-100 btn btn-warning disabled" onclick="window.location.href='{{ quiz_1.get_absolute_url }}'">Take this quiz</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -46,7 +50,11 @@
                         <li>Score to pass (in %): {{ quiz_2.score }}</li>
                         <li>Difficulty: {{ quiz_2.difficulty }}</li>
                     </ul>
-                    <button type="button" class="w-100 btn btn-warning" onclick="window.location.href='{{ quiz_2.get_absolute_url }}'">Take this quiz</button>
+                    {% if user.is_authenticated %}
+                        <button type="button" class="w-100 btn btn-warning" onclick="window.location.href='{{ quiz_2.get_absolute_url }}'">Take this quiz</button>
+                    {% else %}
+                        <button type="button" class="w-100 btn btn-warning disabled" onclick="window.location.href='{{ quiz_2.get_absolute_url }}'">Take this quiz</button>
+                    {% endif %}
                 </div>
             </div>
         </div>
