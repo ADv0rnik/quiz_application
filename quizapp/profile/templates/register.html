@@ -17,6 +17,20 @@
             <div class="modal-body p-5 pt-0 pb-1">
                 <form class="" method="POST" action="" autocomplete="off">
                     {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control rounded-4" id="floatingInputValue2" name="{{ form.first_name.html_name }}" placeholder="First name">
+                                <label for="floatingInputValue2">First name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="form-floating">
+                                <input type="text" class="form-control rounded-4" id="floatingInputValue3" name="{{ form.last_name.html_name }}" placeholder="Last name">
+                                <label for="floatingInputValue3">Last name</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control rounded-4" id="floatingInputValue1" name="{{ form.username.html_name }}" placeholder="Username">
                         <label for="floatingInputValue1">Username</label>
