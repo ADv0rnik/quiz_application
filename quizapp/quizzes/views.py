@@ -136,10 +136,11 @@ def save_quiz_data(request, pk):
         score_ = score * c
         print(results)
 
-        Results.objects.create(quiz=quiz_, score=score_, student=student)
         if score_ >= quiz_.score:
+            Results.objects.create(quiz=quiz_, score=score_, student=student, passed=True)
             return JsonResponse({'passed': True, 'score': score_, "results": results})
         else:
+            Results.objects.create(quiz=quiz_, score=score_, student=student, passed=False)
             return JsonResponse({'passed': False, 'score': score_, "results": results})
 
 

@@ -26,6 +26,7 @@ class Results(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     score = models.FloatField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    passed = models.BooleanField(default=False, help_text='result of taken quiz')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
