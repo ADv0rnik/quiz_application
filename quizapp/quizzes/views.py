@@ -6,7 +6,7 @@ from django.shortcuts import render
 
 from questions.models import Question, Answer
 from quizzes.models import Quiz
-from profile.models import Results
+from profile.models import Results, Student
 
 
 def quiz(request):
@@ -111,6 +111,9 @@ def save_quiz_data(request, pk):
             else:
                 questions.append(question)
         user = request.user
+        print(user)
+        student = Student.objects.filter(user=user)[0]
+        print(student)
         quiz_ = Quiz.objects.get(pk=pk)
         score = 0
         c = 100 / quiz_.number_of_answers  # coefficient that define a value to recalculate the score
@@ -132,8 +135,8 @@ def save_quiz_data(request, pk):
                 results.append({str(q_): 'missed'})
         score_ = score * c
         print(results)
-        # print(score_)
-        Results.objects.create(quiz=quiz_, user=user, score=score_)
+
+        Results.objects.create(quiz=quiz_, score=score_, student=student)
         if score_ >= quiz_.score:
             return JsonResponse({'passed': True, 'score': score_, "results": results})
         else:
