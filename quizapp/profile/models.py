@@ -5,6 +5,7 @@ from quizzes.models import Quiz
 
 
 class Student(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     mail = models.CharField(max_length=100, help_text='email address')
@@ -22,7 +23,6 @@ class Student(models.Model):
 
 class Results(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.FloatField()
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
