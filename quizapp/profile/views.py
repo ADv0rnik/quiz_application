@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import Group
 from .forms import CreateUserForm
 from django.contrib import messages
-from .decorators import unauthenticated_user
+from .decorators import unauthenticated_user, allowed_user
 
 from .models import Student
 
@@ -11,7 +12,6 @@ from .models import Student
 @unauthenticated_user
 def register_user(request):
     form = CreateUserForm()
-
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -20,15 +20,15 @@ def register_user(request):
             first_name = form.cleaned_data.get('first_name')
             last_name = form.cleaned_data.get('last_name')
             email = form.cleaned_data.get('email')
-
             Student.objects.create(
                 user=user,
                 first_name=first_name,
                 last_name=last_name,
                 mail=email,
             )
+            group_name = Group.objects.get(name='student')
+            user.groups.add(group_name)
             messages.success(request, 'Account was created for ' + username)
-
             return redirect('login')
     context = {'form': form}
     return render(request, 'register.html', context)
