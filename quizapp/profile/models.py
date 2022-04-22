@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from django.urls import reverse
 
 from quizzes.models import Quiz
 
@@ -17,6 +17,9 @@ class Student(models.Model):
 
     def get_results(self):
         return self.results_set.all()
+
+    def get_absolute_url(self):
+        return reverse('user', kwargs={'username': self.user})
 
     class Meta:
         verbose_name_plural = 'Students'

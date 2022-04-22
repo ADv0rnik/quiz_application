@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from .forms import CreateUserForm
 from django.contrib import messages
 from .decorators import unauthenticated_user, allowed_user
@@ -41,15 +41,28 @@ def login_user(request):
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
-            login(request, user)
-            return redirect('home')
+            if user.is_superuser:
+                login(request, user)
+                return redirect('home')
+            else:
+                login(request, user)
+                return redirect('user', username=username)
         else:
             messages.info(request, 'Username or password do not match')
-
-    context = {}
-    return render(request, 'login.html', context)
+    return render(request, 'login.html')
 
 
 def logout_user(request):
     logout(request)
     return render(request, 'home.html')
+
+
+@allowed_user(allowed_roles=['student', 'superuser'])
+def user_page(request, username):
+    u = User.objects.get(username=username)
+    student = Student.objects.get(user=u)
+    context = {
+        'username': u,
+        "student": student,
+    }
+    return render(request, 'user_page.html', context)
