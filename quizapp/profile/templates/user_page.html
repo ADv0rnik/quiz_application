@@ -2,32 +2,73 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-mb-12 mt-3">
+        <div class="col-mb-13 mt-3">
             <h3>{{ username.first_name }} {{ username.last_name }}</h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-mb-3">
-            <div class="text-center"></div>
+        <div class="col-sm-3">
+            <div class="text">
                 <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
                 <h6>Select file:</h6>
                 <input type="file" class="text-center center-block file-upload">
-        </div>
-        <div class="col-mb-9 mt-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>Information</h4>
-                    <i class="fa fa-link fa-1x"></i></div>
-                <div class="panel-body">
-                    <ul class="list-unstyled mt-3 mb-4">
-                        <li>Name: {{ student.first_name }}</li>
-                        <li>Surname: {{ student.last_name }}</li>
-                        <li>email: {{ student.mail }}</li>
-                        <li>Registration date: {{ student.date_created }}</li>
-                    </ul>
+            </div>
+            <div class="col-mb-9 mt-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Information</h4>
+                        <i class="fa fa-link fa-1x"></i></div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>Name: {{ student.first_name }}</li>
+                            <li>Surname: {{ student.last_name }}</li>
+                            <li>email: {{ student.mail }}</li>
+                            <li>Department: {{ student.department }}</li>
+                            <li>Occupation: {{ student.occupation }}</li>
+                            <li>Registration date: {{ student.date_created|date:"M d, Y" }}</li>
+                        </ul>
+                    </div>
                 </div>
-          </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                <div class="col-sm-4">
+                    <div class="card mb-3 rounded-3 shadow-sm border-warning">
+                        <div class="card-header py-3 text-center bg-warning border-warning">
+                            <h4 class="my-0 fw-normal">Tests passed</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title score-card-title text-center">2</h1>
+                        </div>
+                    </div>
+            </div>
+                <div class="col-sm-4">
+                    <div class="card mb-3 rounded-3 shadow-sm border-warning">
+                        <div class="card-header py-3 text-center bg-warning border-warning">
+                            <h4 class="my-0 fw-normal">Best score</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title score-card-title text-center">100.0</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <h4>Last quizzes taken</h4>
+                <table class="table table-sm-9">
+                    <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Topic</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Score</th>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
+
