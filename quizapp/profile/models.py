@@ -10,6 +10,8 @@ class Student(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     mail = models.CharField(max_length=100, help_text='email address')
+    department = models.CharField(max_length=200, default='')
+    occupation = models.CharField(max_length=200, default='developer')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
     def __str__(self):
