@@ -2,16 +2,17 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-mb-13 mt-3">
+        <div class="col-sm-3 mt-3">
             <h3>{{ username.first_name }} {{ username.last_name }}</h3>
+        </div>
+        <div class="col-sm-9 mt-3" style="text-align: right;">
+            <a href="{% url 'user_update' request.user %}" class="nav-link px-2 text-dark">Update profile</a>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-3">
             <div class="text">
                 <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
-                <h6>Select file:</h6>
-                <input type="file" class="text-center center-block file-upload">
             </div>
             <div class="col-mb-9 mt-3">
                 <div class="panel panel-default">

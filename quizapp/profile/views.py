@@ -1,8 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import Group, User
-from .forms import CreateUserForm
+from django.contrib.auth.models import Group
+from .forms import CreateUserForm, StudentForm
 from django.contrib import messages
 from .decorators import unauthenticated_user, allowed_user
 from django.db.models import Max
@@ -58,14 +58,18 @@ def logout_user(request):
     return render(request, 'home.html')
 
 
-@allowed_user(allowed_roles=['student', 'superuser'])
-def user_page(request):
+@allowed_user(allowed_roles=['student'])
+def user_page(request, username):
     student = Student.objects.get(user=request.user)
     results = student.get_results().order_by('-date_created')[:5]
     max_score = results.aggregate(Max('score')).get('score__max')
-    quiz_count = results.count()
-    for result in results:
-        print(result.quiz, result.quiz.topic, result.score, result.date_created, result.passed)
+    quiz_count = student.get_results().filter(passed=True).count()
+    print(quiz_count)
+
+
+    # for result in results:
+    #     print(result.quiz, result.quiz.topic, result.score, result.date_created, result.passed)
+
     context = {
         'username': request.user,
         "student": student,
@@ -77,5 +81,22 @@ def user_page(request):
     return render(request, 'user_page.html', context)
 
 
-def update_profile(request):
-    pass
+@login_required
+@allowed_user(allowed_roles=['student'])
+def update_profile(request, username):
+    student = Student.objects.get(user=request.user)
+    form = StudentForm(instance=student)
+    if request.method == "POST":
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+
+    context = {
+        "username": request.user,
+        "form": form
+    }
+    return render(request, 'user_update_page.html', context)
+
+
+
+
