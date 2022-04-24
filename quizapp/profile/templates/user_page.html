@@ -39,7 +39,7 @@
                             <h4 class="my-0 fw-normal">Tests passed</h4>
                         </div>
                         <div class="card-body">
-                            <h1 class="card-title score-card-title text-center">2</h1>
+                            <h1 class="card-title score-card-title text-center">{{ count }}</h1>
                         </div>
                     </div>
             </div>
@@ -49,13 +49,13 @@
                             <h4 class="my-0 fw-normal">Best score</h4>
                         </div>
                         <div class="card-body">
-                            <h1 class="card-title score-card-title text-center">100.0</h1>
+                            <h1 class="card-title score-card-title text-center">{{ max_score }}</h1>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col">
-                <h4>Last quizzes taken</h4>
+                <h4>Last quizzes:</h4>
                 <table class="table table-sm-9">
                     <tr>
                         <th></th>
@@ -65,6 +65,16 @@
                         <th>Status</th>
                         <th>Score</th>
                     </tr>
+                    {% for result in results %}
+                    <tr>
+                        <td></td>
+                        <td>{{ result.quiz }}</td>
+                        <td>{{ result.quiz.topic }}</td>
+                        <td>{{ result.date_created | date:"M d, Y" }}</td>
+                        <td>{{ result.passed }}</td>
+                        <td>{{ result.score }}</td>
+                    </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>

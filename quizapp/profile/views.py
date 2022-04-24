@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, User
 from .forms import CreateUserForm
 from django.contrib import messages
 from .decorators import unauthenticated_user, allowed_user
+from django.db.models import Max
 
 from .models import Student
 
@@ -58,11 +59,23 @@ def logout_user(request):
 
 
 @allowed_user(allowed_roles=['student', 'superuser'])
-def user_page(request, username):
-    u = User.objects.get(username=username)
-    student = Student.objects.get(user=u)
+def user_page(request):
+    student = Student.objects.get(user=request.user)
+    results = student.get_results().order_by('-date_created')[:5]
+    max_score = results.aggregate(Max('score')).get('score__max')
+    quiz_count = results.count()
+    for result in results:
+        print(result.quiz, result.quiz.topic, result.score, result.date_created, result.passed)
     context = {
-        'username': u,
+        'username': request.user,
         "student": student,
+        "results": results,
+        "max_score": max_score,
+        "count": quiz_count,
     }
+
     return render(request, 'user_page.html', context)
+
+
+def update_profile(request):
+    pass
