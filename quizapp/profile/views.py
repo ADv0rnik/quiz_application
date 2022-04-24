@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import Group
 from .forms import CreateUserForm, StudentForm
 from django.contrib import messages
 from .decorators import unauthenticated_user, allowed_user
@@ -16,12 +15,8 @@ def register_user(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST, )
         if form.is_valid():
-            user = form.save()
+            form.save()
             username = form.cleaned_data.get('username')
-            first_name = form.cleaned_data.get('first_name')
-            last_name = form.cleaned_data.get('last_name')
-            email = form.cleaned_data.get('email')
-
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
     context = {'form': form}

@@ -1,8 +1,10 @@
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
 from .models import Student
+from django.dispatch import receiver
 
 
+@receiver(post_save, sender=User)
 def create_student_profile(sender, instance, created, **kwargs):
     if created:
         group_name = Group.objects.get(name='student')
@@ -14,8 +16,3 @@ def create_student_profile(sender, instance, created, **kwargs):
             mail=instance.email,
         )
         print('Profile created!')
-
-
-post_save.connect(create_student_profile, sender=User)
-
-
