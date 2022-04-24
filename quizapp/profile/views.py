@@ -14,21 +14,14 @@ from .models import Student
 def register_user(request):
     form = CreateUserForm()
     if request.method == "POST":
-        form = CreateUserForm(request.POST)
+        form = CreateUserForm(request.POST, )
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
             first_name = form.cleaned_data.get('first_name')
             last_name = form.cleaned_data.get('last_name')
             email = form.cleaned_data.get('email')
-            Student.objects.create(
-                user=user,
-                first_name=first_name,
-                last_name=last_name,
-                mail=email,
-            )
-            group_name = Group.objects.get(name='student')
-            user.groups.add(group_name)
+
             messages.success(request, 'Account was created for ' + username)
             return redirect('login')
     context = {'form': form}
@@ -64,11 +57,6 @@ def user_page(request, username):
     results = student.get_results().order_by('-date_created')[:5]
     max_score = results.aggregate(Max('score')).get('score__max')
     quiz_count = student.get_results().filter(passed=True).count()
-    print(quiz_count)
-
-
-    # for result in results:
-    #     print(result.quiz, result.quiz.topic, result.score, result.date_created, result.passed)
 
     context = {
         'username': request.user,
@@ -90,6 +78,7 @@ def update_profile(request, username):
         form = StudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Account was updated for ' + username)
 
     context = {
         "username": request.user,
