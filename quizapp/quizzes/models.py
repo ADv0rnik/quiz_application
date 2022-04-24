@@ -19,7 +19,7 @@ class Quiz(models.Model):
     difficulty = models.CharField(max_length=50, choices=DIFF_CHOICE)
 
     def __str__(self):
-        return f"{self.name}-{self.topic}"
+        return f"{self.name}"
 
     def get_question(self):
         return self.question_set.all()

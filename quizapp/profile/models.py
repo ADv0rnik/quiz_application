@@ -37,5 +37,8 @@ class Results(models.Model):
     def __str__(self):
         return f"Results_ID: {self.pk}"
 
+    def get_quiz(self):
+        return self.quiz_set.all()
+
     class Meta:
         verbose_name_plural = 'Results'
