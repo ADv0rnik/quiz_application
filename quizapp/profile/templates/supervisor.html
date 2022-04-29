@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3 mt-3">
+            <h3>{{ username.first_name }} {{ username.last_name }}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="text">
+                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
+            </div>
+            <div class="col-mb-9 mt-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>Information</h4>
+                        <i class="fa fa-link fa-1x"></i></div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled mt-3 mb-4">
+                            <li>Name: {{ supervisor.first_name }}</li>
+                            <li>Surname: {{ supervisor.last_name }}</li>
+                            <li>email: {{ supervisor.mail }}</li>
+                            <li>Department: {{ supervisor.department }}</li>
+                            <li>Occupation: {{ supervisor.occupation }}</li>
+                            <li>Registration date: {{ supervisor.date_created|date:"M d, Y" }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div class="col">
+                <div class="col">
+                <h4>Study performance:</h4>
+                <table class="table table-sm-9">
+                    <tr>
+                        <th></th>
+                        <th style="text-align:center">ID</th>
+                        <th style="text-align:center">Name</th>
+                        <th style="text-align:center">Surname</th>
+                        <th style="text-align:center">Department</th>
+                        <th style="text-align:center">Best score</th>
+                        <th style="text-align:center">Successful <br> quizzes</th>
+                        <th style="text-align:center">Recent quiz</th>
+                        <th style="text-align:center">View</th>
+                    </tr>
+                    {% for result in results %}
+                    <tr>
+                        <td></td>
+                        <td style="text-align:center">{{ result.id }}</td>
+                        <td style="text-align:center">{{ result.name }}</td>
+                        <td style="text-align:center">{{ result.surname }}</td>
+                        <td style="text-align:center">{{ result.department }}</td>
+                        <td style="text-align:center">{{ result.score }}</td>
+                        <td style="text-align:center">{{ result.passed }}</td>
+                        <td style="text-align:center">{{ result.recent_quiz }}</td>
+                        <td style="text-align:center">
+                            <a class="btn btn-sm btn-info" href="">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
