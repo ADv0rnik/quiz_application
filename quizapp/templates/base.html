@@ -32,8 +32,15 @@
                     {% if user.is_superuser %}
                         <button type="button" onclick="window.location.href={% url 'logout' %}" class="btn btn-outline-light me-2">Logout</button>
                     {% else %}
-                        <button type="button" onclick="window.location.href={% url 'user' request.user %}" class="btn btn-warning">Profile</button>
-                        <button type="button" onclick="window.location.href={% url 'logout' %}" class="btn btn-outline-light me-2">Logout</button>
+                        {% for group in request.user.groups.all %}
+                            {% if group.name == 'admin' %}
+                                <button type="button" onclick="window.location.href={% url 'supervisor' %}" class="btn btn-warning">Profile</button>
+                                <button type="button" onclick="window.location.href={% url 'logout' %}" class="btn btn-outline-light me-2">Logout</button>
+                            {% else %}
+                                <button type="button" onclick="window.location.href={% url 'user' %}" class="btn btn-warning">Profile</button>
+                                <button type="button" onclick="window.location.href={% url 'logout' %}" class="btn btn-outline-light me-2">Logout</button>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                 </div>
                 {% else %}
