@@ -3,7 +3,10 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-3 mt-3">
-            <h3>{{ username.first_name }} {{ username.last_name }}</h3>
+            <h3>{{ student.first_name }} {{ username.last_name }}</h3>
+        </div>
+        <div class="col-sm-9 mt-3" style="text-align: right;">
+            <a href="{% url 'supervisor_update' %}" class="nav-link px-2 text-dark">Update profile</a>
         </div>
     </div>
     <div class="row">
@@ -56,7 +59,7 @@
                         <td style="text-align:center">{{ result.passed }}</td>
                         <td style="text-align:center">{{ result.recent_quiz }}</td>
                         <td style="text-align:center">
-                            <a class="btn btn-sm btn-info" href="">View</a>
+                           <a class="btn btn-sm btn-info" href="{% url 'student' result.id %}">View</a>
                         </td>
                     </tr>
                     {% endfor %}

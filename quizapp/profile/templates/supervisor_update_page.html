@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-mb-13 mt-3">
+            <h3>{{ username.first_name }} {{ username.last_name }}</h3>
+        </div>
+        {% for message in messages %}
+            <p id="messages">{{ message }}</p>
+        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="text">
+                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
+                <h6>Select file:</h6>
+                <input type="file" class="text-center center-block file-upload">
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <form class="" method="POST" action="">
+                {% csrf_token %}
+                <div class="form-group mb-3" >
+                    {{form.first_name}}
+                </div>
+                <div class="form-group mb-3">
+                    {{form.last_name}}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.mail }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.department }}
+                </div>
+                <div class="form-group mb-3">
+                    {{ form.occupation }}
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <button class="w-90 mb-2 btn btn-lg rounded-4 btn-warning " type="submit">Save</button>
+                        <button class="w-90 mb-2 btn btn-lg rounded-4 btn-light border-dark" onclick="window.location.href={% url 'supervisor' %}" type="button">Back to dashboard</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
