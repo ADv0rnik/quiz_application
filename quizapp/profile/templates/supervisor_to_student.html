@@ -1,39 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="container">
     <div class="row">
         <div class="col-mb-13 mt-3">
-            <h3>{{ username.first_name }} {{ username.last_name }}</h3>
+            <h3>{{ student.first_name }} {{ student.last_name }}</h3>
         </div>
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ form.errors }}</strong>
+            </div>
+        {% endif %}
         {% for message in messages %}
             <p id="messages">{{ message }}</p>
         {% endfor %}
     </div>
     <div class="row">
-        <div class="col-sm-3">
-            <div class="text">
-                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
-                <h6>Select file:</h6>
-                <input type="file" class="text-center center-block file-upload">
-            </div>
-        </div>
         <div class="col-sm-9">
             <form class="" method="POST" action="">
                 {% csrf_token %}
-                <div class="form-group mb-3" >
-                    {{form.first_name}}
-                </div>
-                <div class="form-group mb-3">
-                    {{form.last_name}}
-                </div>
-                <div class="form-group mb-3">
-                    {{ form.mail }}
-                </div>
                 <div class="form-group mb-3">
                     {{ form.department }}
                 </div>
                 <div class="form-group mb-3">
                     {{ form.occupation }}
+                </div>
+                <div class="form-group mb-3">
+                    <label for="group">Set status:</label>
+                    <select name="group" id="group">
+                        <option value="admin">Admin</option>
+                        <option value="student">Student</option>
+                    </select>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -45,4 +42,5 @@
         </div>
     </div>
 </div>
+
 {% endblock %}

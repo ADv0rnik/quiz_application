@@ -1,19 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-from .forms import CreateUserForm, StudentForm
+from django.contrib.auth.models import Group, User
+from .forms import CreateUserForm, StudentForm, UpdateStudentForm
 from django.contrib import messages
 from .decorators import *
 from django.db.models import Max
 
-from .models import Student, Results
+from .models import Student
 
 
 @unauthenticated_user
 def register_user(request):
     form = CreateUserForm()
     if request.method == "POST":
-        form = CreateUserForm(request.POST, )
+        form = CreateUserForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
@@ -46,12 +47,14 @@ def logout_user(request):
 @allowed_user(allowed_roles=['student'])
 def user_page(request):
     student = Student.objects.get(user=request.user)
+    group = student.user.groups.all()[0].name
     results = student.get_results().order_by('-date_created')[:5]
     max_score = results.aggregate(Max('score')).get('score__max')
     quiz_count = student.get_results().filter(passed=True).count()
     context = {
         'username': request.user,
         "student": student,
+        "group": group,
         "results": results,
         "max_score": max_score,
         "count": quiz_count,
@@ -81,6 +84,7 @@ def update_profile(request):
 def admin(request):
     students = Student.objects.select_related('user').all().exclude(user=1)
     supervisor = students.filter(user=request.user)[0]
+    gr = supervisor.user.groups.all()[0].name
     output = []
     for stdnt in students:
         max_score = stdnt.get_results().filter(student=stdnt.id).aggregate(Max('score')).get('score__max')
@@ -99,6 +103,7 @@ def admin(request):
 
     context = {"username": request.user,
                "supervisor": supervisor,
+               "group": gr,
                "results": output}
     return render(request, 'supervisor.html', context)
 
@@ -127,10 +132,34 @@ def student(request, pk):
     results = stdnt_.get_results().order_by('-date_created')[:5]
     max_score = results.aggregate(Max('score')).get('score__max')
     quiz_count = stdnt_.get_results().filter(passed=True).count()
+    gr_ = stdnt_.user.groups.all()[0].name
     context = {
         "student": stdnt_,
+        "group": gr_,
         "results": results,
         "max_score": max_score,
         "count": quiz_count,
     }
     return render(request, 'student.html', context)
+
+
+# Changing status of users here
+@login_required(login_url='login')
+@allowed_user(allowed_roles=['admin'])
+def update_student(request, pk):
+    st = Student.objects.get(pk=pk)
+    form = UpdateStudentForm(instance=st)
+    if request.method == "POST":
+        form = UpdateStudentForm(request.POST, instance=st)
+        if form.is_valid():
+            form.save()
+            gr = request.POST.get('group')
+            group = Group.objects.get(name=gr)
+            st.user.groups.clear()
+            group.user_set.add(st.user)
+            messages.success(request, 'Account was updated for ' + str(st.user))
+    context = {
+        "student": st,
+        "form": form,
+    }
+    return render(request, 'supervisor_to_student.html', context)

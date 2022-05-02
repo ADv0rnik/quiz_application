@@ -5,6 +5,9 @@
         <div class="col-sm-3 mt-3">
             <h3>{{ student.first_name }} {{ student.last_name }}</h3>
         </div>
+        <div class="col-sm-9 mt-3" style="text-align: right;">
+            <a href="{% url 'student_update' student.id %}" class="nav-link px-2 text-dark">Update profile</a>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-3">
@@ -18,12 +21,17 @@
                         <i class="fa fa-link fa-1x"></i></div>
                     <div class="panel-body">
                         <ul class="list-unstyled mt-3 mb-4">
-                            <li>Name: {{ student.first_name }}</li>
-                            <li>Surname: {{ student.last_name }}</li>
-                            <li>email: {{ student.mail }}</li>
-                            <li>Department: {{ student.department }}</li>
-                            <li>Occupation: {{ student.occupation }}</li>
-                            <li>Registration date: {{ student.date_created|date:"M d, Y" }}</li>
+                            <li><b>Name:</b> {{ student.first_name }}</li>
+                            <li><b>Surname:</b> {{ student.last_name }}</li>
+                            <li><b>email:</b> {{ student.mail }}</li>
+                            <li><b>Department:</b> {{ student.department }}</li>
+                            <li><b>Occupation:</b> {{ student.occupation }}</li>
+                            {% if group == 'student' %}
+                                <li><b>Status: &nbsp</b>Student</li>
+                            {% else %}
+                                <li><b>Status: &nbsp</b>Supervisor</li>
+                            {% endif %}
+                            <li><b>Registration date:</b> {{ student.date_created|date:"M d, Y" }}</li>
                         </ul>
                     </div>
                 </div>

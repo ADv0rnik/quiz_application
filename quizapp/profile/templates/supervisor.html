@@ -3,7 +3,7 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-3 mt-3">
-            <h3>{{ student.first_name }} {{ username.last_name }}</h3>
+            <h3>{{ username.first_name }} {{ username.last_name }}</h3>
         </div>
         <div class="col-sm-9 mt-3" style="text-align: right;">
             <a href="{% url 'supervisor_update' %}" class="nav-link px-2 text-dark">Update profile</a>
@@ -21,12 +21,15 @@
                         <i class="fa fa-link fa-1x"></i></div>
                     <div class="panel-body">
                         <ul class="list-unstyled mt-3 mb-4">
-                            <li>Name: {{ supervisor.first_name }}</li>
-                            <li>Surname: {{ supervisor.last_name }}</li>
-                            <li>email: {{ supervisor.mail }}</li>
-                            <li>Department: {{ supervisor.department }}</li>
-                            <li>Occupation: {{ supervisor.occupation }}</li>
-                            <li>Registration date: {{ supervisor.date_created|date:"M d, Y" }}</li>
+                            <li><b>Name:</b> {{ supervisor.first_name }}</li>
+                            <li><b>Surname:</b> {{ supervisor.last_name }}</li>
+                            <li><b>email:</b>  {{ supervisor.mail }}</li>
+                            <li><b>Department:</b>  {{ supervisor.department }}</li>
+                            <li><b>Occupation:</b>  {{ supervisor.occupation }}</li>
+                            {% if group == 'admin' %}
+                                <li><b>Status: &nbsp</b>Supervisor</li>
+                            {% endif %}
+                            <li><b>Registration date:</b>  {{ supervisor.date_created|date:"M d, Y" }}</li>
                         </ul>
                     </div>
                 </div>
