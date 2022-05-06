@@ -12,33 +12,31 @@
     <div class="row">
         <div class="col-sm-3">
             <div class="text">
-                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
-                <h6>Select file:</h6>
-                <input type="file" class="text-center center-block file-upload">
+                {% if student.pic %}
+                    <img src="{{ student.pic.url }}" class="avatar img-circle" alt="avatar" style=
+                        "width: 150px;
+                         height: 150px;
+                         border-radius: 50%;
+                         object-fit: cover;
+                         object-position: center right">
+                {% else %}
+                    <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle" alt="avatar" style=
+                        "width: 150px;
+                         height: 150px;
+                         border-radius: 50%;
+                         object-fit: cover;
+                         object-position: center right">
+                {% endif %}
             </div>
         </div>
         <div class="col-sm-9">
-            <form class="" method="POST" action="">
+            <form class="" method="POST" action="" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="form-group mb-3" >
-                    {{form.first_name}}
-                </div>
-                <div class="form-group mb-3">
-                    {{form.last_name}}
-                </div>
-                <div class="form-group mb-3">
-                    {{ form.mail }}
-                </div>
-                <div class="form-group mb-3">
-                    {{ form.department }}
-                </div>
-                <div class="form-group mb-3">
-                    {{ form.occupation }}
-                </div>
+                {{form.as_p}}
                 <div class="row">
                     <div class="col-md-4">
-                        <button class="w-90 mb-2 btn btn-lg rounded-4 btn-warning " type="submit">Save</button>
-                        <button class="w-90 mb-2 btn btn-lg rounded-4 btn-light border-dark" onclick="window.location.href={% url 'user' %}" type="button">Back to profile</button>
+                        <button class="w-90 mb-2 btn btn-lg rounded-4 btn-warning " type="submit" style="font-size:12pt">Save</button>
+                        <button class="w-90 mb-2 btn btn-lg rounded-4 btn-light border-dark" onclick="window.location.href={% url 'user' %}" type="button" style="font-size:12pt">Back to profile</button>
                     </div>
                 </div>
             </form>

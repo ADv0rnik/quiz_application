@@ -40,6 +40,15 @@ class StudentForm(ModelForm):
         model = Student
         fields = '__all__'
         exclude = ['user', 'date_created']
+        labels = {'first_name': "",
+                  'last_name': "",
+                  'mail': "",
+                  'department': "",
+                  'occupation': ""
+                  }
+        help_text = {
+            'mail': None,
+        }
         widgets = {
             'first_name': TextInput(attrs={
                 'class': "form-control rounded-4",

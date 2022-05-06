@@ -67,14 +67,15 @@ def update_profile(request):
     student_ = Student.objects.get(user=request.user)
     form = StudentForm(instance=student_)
     if request.method == "POST":
-        form = StudentForm(request.POST, instance=student_)
+        form = StudentForm(request.POST, request.FILES, instance=student_)
         if form.is_valid():
             form.save()
             messages.success(request, 'Account was updated for ' + str(request.user))
 
     context = {
         "username": request.user,
-        "form": form
+        "form": form,
+        "student": student_,
     }
     return render(request, 'user_update_page.html', context)
 
@@ -82,6 +83,7 @@ def update_profile(request):
 @login_required(login_url='login')
 @supervisor_only
 def admin(request):
+    recent_quiz = 'No quizzes'
     students = Student.objects.select_related('user').all().exclude(user=1)
     supervisor = students.filter(user=request.user)[0]
     gr = supervisor.user.groups.all()[0].name
@@ -89,20 +91,24 @@ def admin(request):
     for stdnt in students:
         max_score = stdnt.get_results().filter(student=stdnt.id).aggregate(Max('score')).get('score__max')
         quiz_count = stdnt.get_results().filter(passed=True).count()
-        recent_quiz = stdnt.get_results().order_by('-date_created').first().quiz.name
-        output.append({
-            "id": stdnt.id,
-            "name": stdnt.first_name,
-            "surname": stdnt.last_name,
-            "department": stdnt.department,
-            "score": max_score,
-            "passed": quiz_count,
-            "recent_quiz": recent_quiz,
-        })
+        try:
+            recent_quiz = stdnt.get_results().order_by('-date_created').first().quiz.name
+        except Exception as error:
+            print(error)
+            pass
+        finally:
+            output.append({
+                "id": stdnt.id,
+                "name": stdnt.first_name,
+                "surname": stdnt.last_name,
+                "department": stdnt.department,
+                "score": max_score,
+                "passed": quiz_count,
+                "recent_quiz": recent_quiz,
+            })
     print(output)
 
-    context = {"username": request.user,
-               "supervisor": supervisor,
+    context = {"supervisor": supervisor,
                "group": gr,
                "results": output}
     return render(request, 'supervisor.html', context)
@@ -143,7 +149,7 @@ def student(request, pk):
     return render(request, 'student.html', context)
 
 
-# Changing status of users here
+# Changing status of user here
 @login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def update_student(request, pk):
