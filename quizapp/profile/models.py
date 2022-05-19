@@ -41,5 +41,21 @@ class Results(models.Model):
     def get_quiz(self):
         return self.quiz_set.all()
 
+    def get_stack(self):
+        return self.techstack_set.all()
+
     class Meta:
         verbose_name_plural = 'Results'
+
+
+class TechStack(models.Model):
+    name = models.CharField(max_length=100, help_text='technology name')
+    used = models.BooleanField(default=False)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name}"
+
+    class Meta:
+        verbose_name_plural = "Technologies"
+        
