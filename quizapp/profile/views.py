@@ -73,7 +73,6 @@ def update_profile(request):
             messages.success(request, 'Account was updated for ' + str(request.user))
 
     context = {
-        "username": request.user,
         "form": form,
         "student": student_,
     }
@@ -84,10 +83,10 @@ def update_profile(request):
 @supervisor_only
 def admin(request):
     recent_quiz = 'No quizzes'
+    output = []
     students = Student.objects.select_related('user').all().exclude(user=1)
     supervisor = students.filter(user=request.user)[0]
     gr = supervisor.user.groups.all()[0].name
-    output = []
     for stdnt in students:
         max_score = stdnt.get_results().filter(student=stdnt.id).aggregate(Max('score')).get('score__max')
         quiz_count = stdnt.get_results().filter(passed=True).count()
@@ -119,13 +118,13 @@ def update_admin(request):
     supervisor_ = Student.objects.get(user=request.user)
     form = StudentForm(instance=supervisor_)
     if request.method == "POST":
-        form = StudentForm(request.POST, instance=supervisor_)
+        form = StudentForm(request.POST, request.FILES, instance=supervisor_)
         if form.is_valid():
             form.save()
             messages.success(request, 'Account was updated for ' + str(request.user))
 
     context = {
-        "username": request.user,
+        "supervisor": supervisor_,
         "form": form
     }
     return render(request, 'supervisor_update_page.html', context)

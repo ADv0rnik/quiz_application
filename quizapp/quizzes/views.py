@@ -4,9 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
 
+from profile.models import Results, Student
 from questions.models import Question, Answer
 from quizzes.models import Quiz
-from profile.models import Results, Student
 
 
 def quiz(request):
@@ -35,7 +35,6 @@ def quiz_data_view(request, pk):
         for a in q.get_answer():
             answers.append(a.text)
         questions.append({str(q): answers})
-    # print(questions)
     return JsonResponse({
         'data': questions,
         'type': type_of_answers,
@@ -101,19 +100,14 @@ def save_quiz_data(request, pk):
         data_ = clear_data(data)
         print(data_)
         for key in data_.keys():
-            print(key)
             try:
                 question = Question.objects.select_related('quiz').get(text=key)
-                print(question)
-                print('Key exist')
             except questions.models.Question.DoesNotExist as error:
                 print(error)
             else:
                 questions.append(question)
         user = request.user
-        print(user)
         student = Student.objects.filter(user=user)[0]
-        print(student)
         quiz_ = Quiz.objects.get(pk=pk)
         score = 0
         c = 100 / quiz_.number_of_answers  # coefficient that define a value to recalculate the score
