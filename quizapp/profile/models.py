@@ -5,6 +5,13 @@ from django.urls import reverse
 from quizzes.models import Quiz
 
 
+STACK_CHOICE = [
+    ('python', 'python'),
+    ('linux', 'linux'),
+    ('java', 'java'),
+]
+
+
 class Student(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     first_name = models.CharField(max_length=50)
@@ -20,6 +27,9 @@ class Student(models.Model):
 
     def get_results(self):
         return self.results_set.all()
+
+    def get_stack(self):
+        return self.techstack_set.all()
 
     def get_absolute_url(self):
         return reverse('user', kwargs={'username': self.user})
@@ -41,21 +51,20 @@ class Results(models.Model):
     def get_quiz(self):
         return self.quiz_set.all()
 
-    def get_stack(self):
-        return self.techstack_set.all()
-
     class Meta:
         verbose_name_plural = 'Results'
 
 
 class TechStack(models.Model):
-    name = models.CharField(max_length=100, help_text='technology name')
-    used = models.BooleanField(default=False)
+    name = models.CharField(
+        max_length=100,
+        help_text='technology name',
+        choices=STACK_CHOICE,
+    )
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.student}: {self.name}"
 
     class Meta:
         verbose_name_plural = "Technologies"
-        
