@@ -5,9 +5,30 @@
 {% endblock scripts %}
 {% block content %}
 <div class="container mt-3">
-    <h3>{{quiz.name}} ({{quiz.topic}})</h3>
-    <h6>Score to pass: {{quiz.score}} from 100 points</h6>
-    <a href="{% url 'quiz' %}" id="quiz-list-btn" class="btn btn-secondary hide">Go back to quiz list</a>
+    <div class="row">
+        <div class="row">
+            <div class="col-sm-3">
+                <h3>{{quiz.name}} ({{quiz.topic}})</h3>
+            </div>
+            <div class="col-sm-6"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <h6>Score to pass: {{quiz.score}} from 100 points</h6>
+            </div>
+            <div class="col-sm-6">
+                <h6 style="text-align: right">Time left:</h6>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+               <a href="{% url 'quiz' %}" id="quiz-list-btn" class="btn btn-secondary hide">Go back to quiz list</a>
+            </div>
+            <div class="col-sm-6">
+                <div class="col" style="text-align: right" id="timer-box">{{quiz.time}}:00</div>
+            </div>
+        </div>      
+    </div>
 </div>
 <div class="container" id="question-box">
     <form id="quiz-form" class="mt-3 mb-3">

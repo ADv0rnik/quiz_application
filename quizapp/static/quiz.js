@@ -8,6 +8,7 @@ const nextButton = document.getElementById('next-btn')
 const submitButton = document.getElementById('sbt-btn')
 const startButton = document.getElementById('start-btn')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
+const timerBox = document.getElementById('timer-box')
 
 let currentQuestionIndex, resp_data
 
@@ -30,6 +31,47 @@ function startQuiz(){
     resp_data = {}
     resp_data['csrfmiddlewaretoken'] = csrf[0].value
     setNextQuestion()
+    console.log(return_data[2])
+    activateTimer(return_data[2])
+}
+
+const activateTimer = (time) => {
+    if (time.toString().length < 2) {
+        timerBox.innerHTML = `<b>0${time}:00</b>`
+    } else {
+        timerBox.innerHTML = `<b>${time}:00</b>`
+    }
+    let minutes = time - 1
+    let seconds = 60
+    let displaySeconds
+    let displayMinutes
+
+    const timer = setInterval(()=>{
+        seconds --
+        if (seconds < 0) {
+            seconds = 59
+            minutes --
+        }
+        if (minutes.toString().length < 2) {
+            displayMinutes = '0'+minutes
+        } else {
+            displayMinutes = minutes
+        }
+        if(seconds.toString().length < 2) {
+            displaySeconds = '0' + seconds
+        } else {
+            displaySeconds = seconds
+        }
+        if (minutes === 0 && seconds === 0) {
+            timerBox.innerHTML = "<b>00:00</b>"
+            setTimeout(()=>{
+                clearInterval(timer)
+                alert('Time is up')
+                sendData()
+            }, 500)
+        }
+        timerBox.innerHTML = `<b>${displayMinutes}:${displaySeconds}</b>`
+    }, 1000)
 }
 
 var return_data = function () {
@@ -41,7 +83,8 @@ var return_data = function () {
         success: function(response) {
             const data_ = response.data;
             const answ_type = response.type;
-            data.push(data_, answ_type)
+            const time = response.time;
+            data.push(data_, answ_type, time)
             submitButton.style.visibility = "hidden"
             nextButton.style.visibility = "hidden"
         }
@@ -120,6 +163,7 @@ const sendData = () => {
             const results = response.results
             quizForm.style.display = 'none'
             submitButton.style.display = 'none'
+            nextButton.style.display = "none"
 
             scoreBox.innerHTML = `
             <hr>
@@ -152,6 +196,7 @@ const sendData = () => {
                     }
                 }
                 resultBox.append(resDiv)
+                timerBox.innerHTML = `<b>${displayMinutes}:${displaySeconds}</b>`
             })
         },
         error: function(error){
