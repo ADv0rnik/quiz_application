@@ -9,12 +9,17 @@ from questions.models import Question, Answer
 from quizzes.models import Quiz
 
 
+@login_required
 def quiz(request):
-    quiz1 = Quiz.objects.get(pk=1)
-    quiz2 = Quiz.objects.get(pk=2)
+    student_stack = Student.objects.get(user=request.user).get_stack()
+    quizzes = []
+    for item in student_stack:
+        list_of_quizzes = Quiz.objects.filter(stack=item.name)
+        for quiz in list_of_quizzes:
+            quizzes.append(quiz)
     context = {
-        "quiz_1": quiz1,
-        "quiz_2": quiz2
+        "quizzes": quizzes,
+        "user": request.user,
     }
     return render(request, 'quizzes.html', context)
 

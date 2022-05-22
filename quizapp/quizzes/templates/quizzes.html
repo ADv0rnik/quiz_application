@@ -17,47 +17,34 @@
 <hr>
 
 <div class="container py-3">
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
-        <div class="col">
-            <div class="card mb-4 rounded-3 shadow-sm">
-                <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">{{quiz_1.name}}</h4>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mt-3 mb-4">
-                        <li>Topic: {{ quiz_1.topic }}</li>
-                        <li>Number of questions: {{ quiz_1.number_of_questions }}</li>
-                        <li>Score to pass (in %): {{ quiz_1.score }}</li>
-                        <li>Difficulty: {{ quiz_1.difficulty }}</li>
-                    </ul>
-                    {% if user.is_authenticated %}
-                        <button type="button" class="w-100 btn btn-warning" onclick="window.location.href='{{ quiz_1.get_absolute_url }}'">Take this quiz</button>
-                    {% else %}
-                        <button type="button" class="w-100 btn btn-warning disabled" onclick="window.location.href='{{ quiz_1.get_absolute_url }}'">Take this quiz</button>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card mb-4 rounded-3 shadow-sm">
-                <div class="card-header py-3">
-                    <h4 class="my-0 fw-normal">{{quiz_2.name}}</h4>
-                </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mt-3 mb-4">
-                        <li>Topic: {{ quiz_2.topic }}</li>
-                        <li>Number of questions: {{ quiz_2.number_of_questions }}</li>
-                        <li>Score to pass (in %): {{ quiz_2.score }}</li>
-                        <li>Difficulty: {{ quiz_2.difficulty }}</li>
-                    </ul>
-                    {% if user.is_authenticated %}
-                        <button type="button" class="w-100 btn btn-warning" onclick="window.location.href='{{ quiz_2.get_absolute_url }}'">Take this quiz</button>
-                    {% else %}
-                        <button type="button" class="w-100 btn btn-warning disabled" onclick="window.location.href='{{ quiz_2.get_absolute_url }}'">Take this quiz</button>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+    <div class="col">
+        <h4>List of quizzes for {{ user.first_name }} {{ user.last_name }}:</h4>
+        <table class="table table-sm-9">
+            <tr>
+                <th></th>
+                <th style="text-align:center">Title</th>
+                <th style="text-align:center">Topic</th>
+                <th style="text-align:center">Number of questions</th>
+                <th style="text-align:center">Duration of the quiz</th>
+                <th style="text-align:center">Score</th>
+                <th style="text-align:center">Difficulty</th>
+                <th style="text-align:center">View</th>
+            </tr>
+            {% for quiz in quizzes %}
+            <tr>
+                <td></td>
+                <td style="text-align:center">{{ quiz.name }}</td>
+                <td style="text-align:center">{{ quiz.topic }}</td>
+                <td style="text-align:center">{{ quiz.number_of_questions }}</td>
+                <td style="text-align:center">{{ quiz.time }}</td>
+                <td style="text-align:center">{{ quiz.score }}</td>
+                <td style="text-align:center">{{ quiz.difficulty }}</td>
+                <td style="text-align:center">
+                    <a class="btn btn-sm btn-info" href="{{ quiz.get_absolute_url }}">Go to quiz</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 </div>
 

@@ -12,6 +12,7 @@ DIFF_CHOICE = [
 class Quiz(models.Model):
     name = models.CharField(max_length=150)
     topic = models.CharField(max_length=150)
+    stack = models.CharField(max_length=150, blank=False, default="python")
     number_of_questions = models.IntegerField()
     number_of_answers = models.IntegerField(default=0)
     time = models.IntegerField(help_text='duration of the quiz')
