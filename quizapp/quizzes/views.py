@@ -9,7 +9,7 @@ from questions.models import Question, Answer
 from quizzes.models import Quiz
 
 
-@login_required
+@login_required(login_url='login')
 def quiz(request):
     student_stack = Student.objects.get(user=request.user).get_stack()
     quizzes = []
@@ -32,6 +32,8 @@ def quiz_data(request, pk):
 
 def quiz_data_view(request, pk):
     data = Quiz.objects.get(pk=pk)
+    time = data.time
+    print(time)
     questions = []
     type_of_answers = []
     for q in data.get_question():
@@ -43,6 +45,7 @@ def quiz_data_view(request, pk):
     return JsonResponse({
         'data': questions,
         'type': type_of_answers,
+        'time': time,
     })
 
 
@@ -136,11 +139,11 @@ def save_quiz_data(request, pk):
         print(results)
 
         if score_ >= quiz_.score:
-            Results.objects.create(quiz=quiz_, score=score_, student=student, passed=True)
-            return JsonResponse({'passed': True, 'score': score_, "results": results})
+            Results.objects.create(quiz=quiz_, score=round(score_, 2), student=student, passed=True)
+            return JsonResponse({'passed': True, 'score': round(score_, 2), "results": results})
         else:
-            Results.objects.create(quiz=quiz_, score=score_, student=student, passed=False)
-            return JsonResponse({'passed': False, 'score': score_, "results": results})
+            Results.objects.create(quiz=quiz_, score=round(score_, 2), student=student, passed=False)
+            return JsonResponse({'passed': False, 'score': round(score_, 2), "results": results})
 
 
 def index(request):
