@@ -29,18 +29,24 @@
                 <th style="text-align:center">Score</th>
                 <th style="text-align:center">Difficulty</th>
                 <th style="text-align:center">View</th>
+                <th style="text-align:center">Status</th>
             </tr>
-            {% for quiz in quizzes %}
+            {% for key, value in quizzes.items %}
             <tr>
                 <td></td>
-                <td style="text-align:center">{{ quiz.name }}</td>
-                <td style="text-align:center">{{ quiz.topic }}</td>
-                <td style="text-align:center">{{ quiz.number_of_questions }}</td>
-                <td style="text-align:center">{{ quiz.time }}</td>
-                <td style="text-align:center">{{ quiz.score }}</td>
-                <td style="text-align:center">{{ quiz.difficulty }}</td>
+                <td style="text-align:center">{{ value.name }}</td>
+                <td style="text-align:center">{{ value.topic }}</td>
+                <td style="text-align:center">{{ value.number_of_questions }}</td>
+                <td style="text-align:center">{{ value.time }}</td>
+                <td style="text-align:center">{{ value.score }}</td>
+                <td style="text-align:center">{{ value.difficulty }}</td>
+                {% if value.status == 'Passed' %}
+                    <td style="text-align:center; color: green">Passed</td>
+                {% else %}
+                    <td style="text-align:center; color: red">Failed</td>
+                {% endif %}
                 <td style="text-align:center">
-                    <a class="btn btn-sm btn-info" href="{{ quiz.get_absolute_url }}">Go to quiz</a>
+                    <a class="btn btn-sm btn-info" href="{% url 'quiz-data' key %}">Go to quiz</a>
                 </td>
             </tr>
             {% endfor %}

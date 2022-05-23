@@ -35,7 +35,7 @@
         {% csrf_token %}
         <div id="quiz-box">
             <p class="lead">Each Multiple Choice question must have at least two answer choices and one or more correct answers. <br>
-            The quiz contains {{quiz.number_of_questions}} questions and there is no time limit.
+            The quiz contains {{quiz.number_of_questions}} questions and you have {{quiz.time}} minutes to solve it.
             At the end of the quiz, you’ll receive a total score. <br> The maximum score is 100%. <br>
             Good luck!</p>
         </div>

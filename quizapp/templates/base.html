@@ -18,12 +18,16 @@
                 </a>
 
                 <ul class="nav col-12 col-lg-6 me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary">Home</a></li>
-                    <li><a href="{% url 'quiz' %}" class="nav-link px-2 text-white">Quizzes</a></li>
-                    <li><a href="{% url 'about' %}" class="nav-link px-2 text-white">About</a></li>
-                    <li><a href="#" class="nav-link px-2 text-white">Contacts</a></li>
                     {% if user.is_superuser %}
+                        <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary">Home</a></li>
+                        <li><a href="{% url 'about' %}" class="nav-link px-2 text-white">About</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">Contacts</a></li>
                         <li><a href="{% url 'admin:index' %}" class="nav-link px-2 text-white">Manage accounts</a></li>
+                    {% else %}
+                        <li><a href="{% url 'home' %}" class="nav-link px-2 text-secondary">Home</a></li>
+                        <li><a href="{% url 'quiz' %}" class="nav-link px-2 text-white">Quizzes</a></li>
+                        <li><a href="{% url 'about' %}" class="nav-link px-2 text-white">About</a></li>
+                        <li><a href="#" class="nav-link px-2 text-white">Contacts</a></li>
                     {% endif %}
                 </ul>
                 {% if user.is_authenticated %}
