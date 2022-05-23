@@ -25,17 +25,17 @@ nextButton.addEventListener('click', () => {
 })
 
 function startQuiz(){
+    var timer = null
     startButton.style.display = 'none'
     nextButton.style.visibility  = 'visible'
     currentQuestionIndex = 0
     resp_data = {}
     resp_data['csrfmiddlewaretoken'] = csrf[0].value
     setNextQuestion()
-    console.log(return_data[2])
     activateTimer(return_data[2])
 }
 
-const activateTimer = (time) => {
+function activateTimer(time) {
     if (time.toString().length < 2) {
         timerBox.innerHTML = `<b>0${time}:00</b>`
     } else {
@@ -46,7 +46,7 @@ const activateTimer = (time) => {
     let displaySeconds
     let displayMinutes
 
-    const timer = setInterval(()=>{
+    timer = setInterval(()=>{
         seconds --
         if (seconds < 0) {
             seconds = 59
@@ -72,6 +72,11 @@ const activateTimer = (time) => {
         }
         timerBox.innerHTML = `<b>${displayMinutes}:${displaySeconds}</b>`
     }, 1000)
+}
+
+function stopTimer(){
+    clearInterval(timer)
+    timerBox.innerHTML = `<b>${return_data[2]}:00</b>`
 }
 
 var return_data = function () {
@@ -196,7 +201,7 @@ const sendData = () => {
                     }
                 }
                 resultBox.append(resDiv)
-                timerBox.innerHTML = `<b>${displayMinutes}:${displaySeconds}</b>`
+                stopTimer()
             })
         },
         error: function(error){
