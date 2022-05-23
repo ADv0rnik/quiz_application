@@ -1,5 +1,3 @@
-import re
-
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -7,26 +5,28 @@ from django.shortcuts import render
 from profile.models import Results, Student
 from questions.models import Question, Answer
 from quizzes.models import Quiz
+from .helper import get_quizzes_storage, get_available_quizzes, clear_data
 
 
 @login_required(login_url='login')
 def quiz(request):
+    student_id = Student.objects.get(user=request.user).id
     student_stack = Student.objects.get(user=request.user).get_stack()
-    quizzes = []
-    for item in student_stack:
-        list_of_quizzes = Quiz.objects.filter(stack=item.name)
-        for quiz in list_of_quizzes:
-            quizzes.append(quiz)
+    quizzes = get_available_quizzes(student_stack)
+    results = Results.objects.select_related('quiz').filter(student=student_id).filter(passed=True)
+    storage_of_quizzes = get_quizzes_storage(results=results, quizzes=quizzes)
+    print(storage_of_quizzes)
     context = {
-        "quizzes": quizzes,
+        "quizzes": storage_of_quizzes,
         "user": request.user,
+        "quiz_": quizzes,
     }
     return render(request, 'quizzes.html', context)
 
 
 @login_required
-def quiz_data(request, pk):
-    q = Quiz.objects.get(pk=pk)
+def quiz_data(request, key):
+    q = Quiz.objects.get(pk=key)
     return render(request, 'quiz.html', {"quiz": q})
 
 
@@ -47,27 +47,6 @@ def quiz_data_view(request, pk):
         'type': type_of_answers,
         'time': time,
     })
-
-
-def clear_data(var):
-    new_dict = {}
-    pattern = '[A-zА-я0-9\,\(\)\s]*\?'
-    for key, val in var.copy().items():
-        if len(val) > 1:
-            new_val = val[1:]
-        else:
-            new_val = val
-        new_key = re.findall(pattern, key)
-        if new_key[0] not in new_dict:
-            new_dict[new_key[0]] = sorted(new_val)
-    return to_lower_case(new_dict)
-
-
-def to_lower_case(dictionary):
-    for key, value in dictionary.items():
-        for v in range(len(value)):
-            value[v] = value[v].lower()
-    return dictionary
 
 
 # a function to check correct answer for questions with multiple choice.

@@ -8,7 +8,7 @@ from .views import (
 
 urlpatterns = [
     path('', quiz, name='quiz'),
-    path('<int:pk>/', quiz_data, name='quiz-data'),
+    path('<int:key>/', quiz_data, name='quiz-data'),
     path('<int:pk>/data/', quiz_data_view, name='quiz-data-view'),
     path('<int:pk>/save/', save_quiz_data, name='save-data'),
 ]
