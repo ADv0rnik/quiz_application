@@ -8,6 +8,12 @@ DIFF_CHOICE = [
     ('hard', 'hard'),
 ]
 
+DEPT_CHOICE = [
+    ("empty", "empty"),
+    ("development", "development"),
+    ("engineering", "engineering")
+]
+
 
 class Quiz(models.Model):
     name = models.CharField(max_length=150)
@@ -18,6 +24,7 @@ class Quiz(models.Model):
     time = models.IntegerField(help_text='duration of the quiz')
     score = models.IntegerField(help_text='required score to pass the quiz')
     difficulty = models.CharField(max_length=50, choices=DIFF_CHOICE)
+    assigned_to = models.CharField(max_length=50, choices=DEPT_CHOICE, default="empty")
 
     def __str__(self):
         return f"{self.name}"

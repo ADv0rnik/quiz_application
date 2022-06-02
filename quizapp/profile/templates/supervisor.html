@@ -6,7 +6,14 @@
             <h3>{{ supervisor.first_name }} {{ supervisor.last_name }}</h3>
         </div>
         <div class="col-sm-9 mt-3" style="text-align: right;">
-            <a href="{% url 'supervisor_update' %}" class="nav-link px-2 text-dark">Update profile</a>
+            <div class="row">
+                <div class="col-sm-10">
+                    <a class="btn btn-sm btn-warning" href="">Manage quizzes</a>
+                </div>
+                <div class="col-sm-2">
+                    <a class="btn btn-sm btn-outline-dark me-1" href="{% url 'supervisor_update' %}">Update profile</a>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
