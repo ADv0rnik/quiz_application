@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
+
+
+
+
+
+
+
+
 <div class="container">
     <div class="row">
         <div class="col-sm-3 mt-3">
@@ -7,11 +15,14 @@
         </div>
         <div class="col-sm-9 mt-3" style="text-align: right;">
             <div class="row">
-                <div class="col-sm-10">
-                    <a class="btn btn-sm btn-warning" href="">Manage quizzes</a>
-                </div>
-                <div class="col-sm-2">
-                    <a class="btn btn-sm btn-outline-dark me-1" href="{% url 'supervisor_update' %}">Update profile</a>
+                <div class="dropdown">
+                    <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="{% url 'supervisor_update' %}">Update profile</a></li>
+                        <li><a class="dropdown-item" href="#">Manage quizzes</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
