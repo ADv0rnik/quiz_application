@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="col">
+            <div class="col">
+                <div class="col mt-3">
+                <h4>List of quizzes</h4>
+                <table class="table table-sm-9">
+                    <tr>
+                        <th></th>
+                        <th style="text-align:center">ID</th>
+                        <th style="text-align:center">Name</th>
+                        <th style="text-align:center">Topic</th>
+                        <th style="text-align:center">Number of questions</th>
+                        <th style="text-align:center">Time</th>
+                        <th style="text-align:center">Score</th>
+                        <th style="text-align:center">Assigned to</th>
+                        <th style="text-align:center">Difficulty</th>
+                    </tr>
+                    {% for quiz in quizzes %}
+                    <tr>
+                        <td></td>
+                        <td style="text-align:center">{{ quiz.id }}</td>
+                        <td style="text-align:center">{{ quiz.name }}</td>
+                        <td style="text-align:center">{{ quiz.topic }}</td>
+                        <td style="text-align:center">{{ quiz.number_of_questions }}</td>
+                        <td style="text-align:center">{{ quiz.time }}</td>
+                        <td style="text-align:center">{{ quiz.score }}</td>
+                        <td style="text-align:center">
+                            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+                                <option selected>{{ quiz.assigned_to }}</option>
+                                <option value="all">all</option>
+                                <option value="development">development</option>
+                                <option value="engineering">engineering</option>
+                            </select>
+                        </td>
+                        <td style="text-align:center">{{ quiz.difficulty }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            </div>
+        </div>
+</div>
+
+{% endblock %}

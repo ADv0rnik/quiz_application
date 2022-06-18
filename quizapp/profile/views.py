@@ -1,13 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import Group, User
-from .forms import CreateUserForm, StudentForm, UpdateStudentForm
+from django.contrib.auth.models import Group
 from django.contrib import messages
-from .decorators import *
 from django.db.models import Max
 
+from .forms import CreateUserForm, StudentForm, UpdateStudentForm
+from .decorators import *
 from .models import Student
+
+from quizzes.models import Quiz
 
 
 @unauthenticated_user
@@ -128,6 +130,17 @@ def update_admin(request):
         "form": form
     }
     return render(request, 'supervisor_update_page.html', context)
+
+
+@login_required(login_url='login')
+@supervisor_only
+def manage_quizzes(request):
+    quiz = Quiz.objects.order_by('id')
+    print(quiz)
+    context = {
+        "quizzes": quiz,
+    }
+    return render(request, 'manage_quizzes.html', context=context)
 
 
 @login_required(login_url='login')

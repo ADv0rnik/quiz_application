@@ -1,13 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-
-
-
-
-
-
-
-
 <div class="container">
     <div class="row">
         <div class="col-sm-3 mt-3">
@@ -16,12 +8,12 @@
         <div class="col-sm-9 mt-3" style="text-align: right;">
             <div class="row">
                 <div class="dropdown">
-                    <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         Action
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li><a class="dropdown-item" href="{% url 'supervisor_update' %}">Update profile</a></li>
-                        <li><a class="dropdown-item" href="#">Manage quizzes</a></li>
+                        <li><a class="dropdown-item" href="{% url 'manage_quizzes' %}">Manage quizzes</a></li>
                     </ul>
                 </div>
             </div>
