@@ -144,6 +144,13 @@ def manage_quizzes(request):
 
 
 @login_required(login_url='login')
+def save_manage_quizzes(request):
+    if request.is_ajax():
+        data = dict(request.POST.lists())
+        print(data)
+
+
+@login_required(login_url='login')
 @allowed_user(allowed_roles=['admin'])
 def student(request, pk):
     stdnt_ = Student.objects.get(id=pk)
