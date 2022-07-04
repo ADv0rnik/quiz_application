@@ -2,22 +2,21 @@ const url = window.location.href
 console.log(url)
 
 const appBtn = document.getElementById('applyBtn')
+const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 appBtn.addEventListener('click', getData)
 
 
 function getData() {
-  var send_list = []
+  var send_data = {}
+  send_data['csrfmiddlewaretoken'] = csrf[0].value
   $('#quiz-table').find(':checkbox:checked').each(function() {
-    var dict = {};
     var key = $(this).val()
     var value = $(this).parent().parent().find("select option:checked").val();
-    dict["id"] = key
-    dict["assignation"] = value
-    send_list.push(dict)
+    send_data[key] = value
   });
-  console.log(send_list);
-  SendData(send_list)
+  console.log(send_data);
+  SendData(send_data)
 }
 
 function SendData(data) {

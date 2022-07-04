@@ -95,7 +95,7 @@ var return_data = function () {
         }
     })
     return data;
-};
+}();
 
 function setNextQuestion(){
     checkAnswers()

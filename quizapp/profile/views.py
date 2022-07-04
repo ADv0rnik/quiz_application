@@ -143,10 +143,21 @@ def manage_quizzes(request):
     return render(request, 'manage_quizzes.html', context=context)
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
 @login_required(login_url='login')
 def save_manage_quizzes(request):
-    if request.is_ajax():
+    """
+    This veiw function collect data sent by ajax from the assignation.js
+    :param request: contain dictionary of data,
+    where key is quiz_id and value - assigned_to
+    :return:
+    """
+    if is_ajax(request=request):
         data = dict(request.POST.lists())
+        data.pop("csrfmiddlewaretoken")
         print(data)
 
 
