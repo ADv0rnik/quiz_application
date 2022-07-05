@@ -150,7 +150,7 @@ def is_ajax(request):
 @login_required(login_url='login')
 def save_manage_quizzes(request):
     """
-    This veiw function collect data sent by ajax from the assignation.js
+    This view function collect data sent by ajax from the assignation.js
     :param request: contain dictionary of data,
     where key is quiz_id and value - assigned_to
     :return:

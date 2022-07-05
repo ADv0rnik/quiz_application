@@ -17,6 +17,7 @@ function getData() {
   });
   console.log(send_data);
   SendData(send_data)
+  alert("The quizzes have been updated")
 }
 
 function SendData(data) {
