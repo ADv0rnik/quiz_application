@@ -153,12 +153,14 @@ def save_manage_quizzes(request):
     This view function collect data sent by ajax from the assignation.js
     :param request: contain dictionary of data,
     where key is quiz_id and value - assigned_to
-    :return:
+    :return: render to 'manage_quizzes.html'
     """
     if is_ajax(request=request):
         data = dict(request.POST.lists())
         data.pop("csrfmiddlewaretoken")
-        print(data)
+        for key, value in data.items():
+            Quiz.objects.filter(pk=key).update(assigned_to=value[0])
+    return render(request, 'manage_quizzes.html')
 
 
 @login_required(login_url='login')
