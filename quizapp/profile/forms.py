@@ -9,6 +9,7 @@ GROUP_CHOICES = (
     ("student", "student"),
 )
 
+
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User

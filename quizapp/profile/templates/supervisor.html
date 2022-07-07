@@ -6,7 +6,17 @@
             <h3>{{ supervisor.first_name }} {{ supervisor.last_name }}</h3>
         </div>
         <div class="col-sm-9 mt-3" style="text-align: right;">
-            <a href="{% url 'supervisor_update' %}" class="nav-link px-2 text-dark">Update profile</a>
+            <div class="row">
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="{% url 'supervisor_update' %}">Update profile</a></li>
+                        <li><a class="dropdown-item" href="{% url 'manage_quizzes' %}">Manage quizzes</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">

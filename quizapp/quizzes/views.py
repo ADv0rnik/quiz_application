@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 from profile.models import Results, Student
+from profile.decorators import supervisor_only
 from questions.models import Question, Answer
 from quizzes.models import Quiz
 from .helper import get_quizzes_storage, get_available_quizzes, clear_data
@@ -49,9 +50,13 @@ def quiz_data_view(request, pk):
     })
 
 
-# a function to check correct answer for questions with multiple choice.
-# The "local_score" variable is a counter for correct answers. Positive values correspond to correct answers
 def check_answers(selected, actual):
+    """ A function to check correct answer for questions with multiple choice.
+    Returns
+    -------
+    "local_score" variable is a counter for correct answers.
+    Positive values correspond to correct answers
+    """
     local_score = 0
     correct_answers = []
     for selected_answer in selected:

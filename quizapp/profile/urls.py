@@ -9,6 +9,8 @@ from .views import (
     update_admin,
     student,
     update_student,
+    manage_quizzes,
+    save_manage_quizzes,
 )
 
 urlpatterns = [
@@ -21,6 +23,8 @@ urlpatterns = [
 
     path('supervisor/', admin, name='supervisor'),
     path('supervisor/update', update_admin, name='supervisor_update'),
+    path('supervisor/manage_quizzes', manage_quizzes, name='manage_quizzes'),
+    path('supervisor/manage_quizzes/save', save_manage_quizzes, name='save_manage_quizzes'),
 
     path('student/<str:pk>/', student, name='student'),
     path('student/<str:pk>/update/', update_student, name='student_update'),
