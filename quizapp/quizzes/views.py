@@ -82,7 +82,7 @@ def is_ajax(request):
 
 @login_required
 def save_quiz_data(request, pk):
-    f"""
+    """
     The function process an Ajax response that returns a JSON array of objects
     
     :param request: a JSON array of objects presented as questions: answers
