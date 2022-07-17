@@ -135,8 +135,7 @@ def update_admin(request):
 @login_required(login_url='login')
 @supervisor_only
 def manage_quizzes(request):
-    quiz = Quiz.objects.order_by('id')
-    print(quiz)
+    quiz = Quiz.objects.filter(stack="common").order_by('id')
     context = {
         "quizzes": quiz,
     }
@@ -158,6 +157,7 @@ def save_manage_quizzes(request):
     if is_ajax(request=request):
         data = dict(request.POST.lists())
         data.pop("csrfmiddlewaretoken")
+        print(data)
         for key, value in data.items():
             Quiz.objects.filter(pk=key).update(assigned_to=value[0])
     return render(request, 'manage_quizzes.html')

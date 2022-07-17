@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.shortcuts import render
 
 from profile.models import Results, Student
-from profile.decorators import supervisor_only
 from questions.models import Question, Answer
 from quizzes.models import Quiz
 from .helper import get_quizzes_storage, get_available_quizzes, clear_data
@@ -13,7 +12,8 @@ from .helper import get_quizzes_storage, get_available_quizzes, clear_data
 def quiz(request):
     student_id = Student.objects.get(user=request.user).id
     student_stack = Student.objects.get(user=request.user).get_stack()
-    quizzes = get_available_quizzes(student_stack)
+    student_department = Student.objects.get(user=request.user).department
+    quizzes = get_available_quizzes(student_stack, department=student_department)
     results = Results.objects.select_related('quiz').filter(student=student_id).filter(passed=True)
     storage_of_quizzes = get_quizzes_storage(results=results, quizzes=quizzes)
     print(storage_of_quizzes)
@@ -34,7 +34,6 @@ def quiz_data(request, key):
 def quiz_data_view(request, pk):
     data = Quiz.objects.get(pk=pk)
     time = data.time
-    print(time)
     questions = []
     type_of_answers = []
     for q in data.get_question():
@@ -51,11 +50,9 @@ def quiz_data_view(request, pk):
 
 
 def check_answers(selected, actual):
-    """ A function to check correct answer for questions with multiple choice.
-    Returns
-    -------
-    "local_score" variable is a counter for correct answers.
-    Positive values correspond to correct answers
+    """The function checks correct answers for questions with multiple choice.
+
+    :returns: "local_score" variable is a counter for correct answers. Positive values correspond to correct answers
     """
     local_score = 0
     correct_answers = []
@@ -85,6 +82,13 @@ def is_ajax(request):
 
 @login_required
 def save_quiz_data(request, pk):
+    f"""
+    The function process an Ajax response that returns a JSON array of objects
+    
+    :param request: a JSON array of objects presented as questions: answers
+    :param pk: quiz id
+    :return: JsonResponse that contain results of the passed quiz  
+    """
     if is_ajax(request=request):
         questions = []
         data = dict(request.POST.lists())
